@@ -28,6 +28,7 @@ app.post('/sendEmail', (req, res) => {
     mailer({
         from: 'mensShirtUz@gmail.com',
         to: 'mensShirtUz@gmail.com',
+        subject: 'Mens Shirt',
         text: `Ismi: ${username}\nTelefon raqami: ${phone}\nSms: ${message}\n`,
     })
     res.json({status: 200, message: 'OK'})
