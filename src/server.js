@@ -40,6 +40,7 @@ app.post('/sendPhone', (req, res) => {
     mailer({
         from: 'mensShirtUz@gmail.com',
         to: 'mensShirtUz@gmail.com',
+        subject: 'Mens Shirt ',
         text: `Ismi: ${username}\nTelefon raqami: ${phone}`,
     })
     res.json({status: 200, message: 'OK'})
@@ -52,6 +53,7 @@ app.post('/sendMessage', (req, res) => {
     mailer({
         from: 'mensShirtUz@gmail.com',
         to: 'mensShirtUz@gmail.com',
+        subject: 'Mens Shirt ',
         text: `Message: ${message}\nTelefon raqami: ${phone}`,
     })
     res.json({status: 200, message: 'OK'})
