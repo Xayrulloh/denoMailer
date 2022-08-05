@@ -47,7 +47,7 @@ app.post('/sendPhone', (req, res) => {
 
 app.post('/sendMessage', (req, res) => {
     let {message, phone} = req.body
-    if (!/^[+]998([012345789][012345789]|6[125679]|7[01234569])[0-9]{7}$/.test(phone) || !['Пошить', 'Лекала', 'Принт', 'Вышивка', 'Консультация'].includes(option.value)) return res.json({status: 400, message: 'You missed something'})
+    if (!/^[+]998([012345789][012345789]|6[125679]|7[01234569])[0-9]{7}$/.test(phone) || !['Пошить', 'Лекала', 'Принт', 'Вышивка', 'Консультация'].includes(message)) return res.json({status: 400, message: 'You missed something'})
 
     mailer({
         from: 'mensShirtUz@gmail.com',
