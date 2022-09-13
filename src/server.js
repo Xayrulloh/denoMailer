@@ -9,8 +9,8 @@ process.env.PORT = process.env.PORT || 5000
 let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'nemomensshirt@gmail.com',
-        pass: 'zfujudnxftsstwhd',
+        user: 'mensshirtuzssss@gmail.com',
+        pass: 'kbxkhmvembeoqcur',
     }
 })
 
@@ -24,8 +24,8 @@ let mailer = message => {
 app.post('/sendEmail', (req, res) => {
     let {username, phone, message} = req.body
     mailer({
-        from: 'nemomensshirt@gmail.com',
-        to: 'nemomensshirt@gmail.com',
+        from: 'mensshirtuzssss@gmail.com',
+        to: 'mensshirtuzssss@gmail.com',
         subject: 'Mens Shirt',
         text: `Ismi: ${username}\nTelefon raqami: ${phone}\nSms: ${message}\n`,
     })
@@ -35,8 +35,8 @@ app.post('/sendEmail', (req, res) => {
 app.post('/sendPhone', (req, res) => {
     let {username, phone} = req.body
     mailer({
-        from: 'nemomensshirt@gmail.com',
-        to: 'nemomensshirt@gmail.com',
+        from: 'mensshirtuzssss@gmail.com',
+        to: 'mensshirtuzssss@gmail.com',
         subject: 'Mens Shirt ',
         text: `Ismi: ${username}\nTelefon raqami: ${phone}`,
     })
@@ -46,8 +46,8 @@ app.post('/sendPhone', (req, res) => {
 app.post('/sendMessage', (req, res) => {
     let {message, phone} = req.body
     mailer({
-        from: 'nemomensshirt@gmail.com',
-        to: 'nemomensshirt@gmail.com',
+        from: 'mensshirtuzsss@gmail.com',
+        to: 'mensshirtuzsss@gmail.com',
         subject: 'Mens Shirt ',
         text: `Message: ${message}\nTelefon raqami: ${phone}`,
     })
