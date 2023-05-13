@@ -134,6 +134,4 @@ app.post("/nemomensshirt/sendMessage", async (req, res) => {
   res.json({ status: 200, message: "OK" })
 })
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`)
-})
+app.listen()
