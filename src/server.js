@@ -12,6 +12,7 @@ app.use(express.static("public"))
 app.use(cors())
 
 const PORT = Deno.env.get("PORT") || 5000
+console.info(PORT);
 
 app.post("/mensshirt/sendEmail", async (req, res) => {
   const checkBody = IsExist(req.body)
