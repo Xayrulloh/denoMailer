@@ -1,5 +1,5 @@
-import express from "npm:express@4.18.2"
-import cors from "npm:cors"
+import express from "https://esm.sh/express@4.18.2"
+import cors from "https://esm.sh/cors@2.8.5"
 
 import { mensshirtClient, nemomensshirtClient } from "./config/config.js"
 import { IsExist } from "./helper/input-check.js"
