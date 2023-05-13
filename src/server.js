@@ -1,63 +1,138 @@
-const express = require('express'), app = express(), nodemailer = require('nodemailer'), path = require('path'), cors = require('cors')
+import express from "npm:express"
+import cors from "npm:cors"
+
+import { mensshirtClient, nemomensshirtClient } from "./config/config.js"
+import { IsExist } from "./helper/input-check.js"
+
+const app = express()
 
 app.use(express.json())
-app.use(express.urlencoded({extended: true}))
-app.use(express.static('public'))
+app.use(express.urlencoded({ extended: true }))
+app.use(express.static("public"))
 app.use(cors())
-process.env.PORT = process.env.PORT || 5000
 
-let transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'mensshirtuz@gmail.com',
-        pass: 'kbxkhmvembeoqcur',
-    }
+const PORT = Deno.env.get("PORT") || 5000
+
+app.post("/mensshirt/sendEmail", async (req, res) => {
+  const checkBody = IsExist(req.body)
+
+  if (!checkBody) {
+    res.json({ status: 200, message: "OK" })
+    return
+  }
+
+  const { username, phone, message } = req.body
+
+  await mensshirtClient.send({
+    to: Deno.env.get("MENSSHIRT_USERNAME"),
+    from: Deno.env.get("MENSSHIRT_USERNAME"),
+    subject: "Mens Shirt",
+    content: `Ismi: ${username}\nTelefon raqami: ${phone}\nSms: ${message}\n`,
+  })
+
+  res.json({ status: 200, message: "OK" })
 })
 
-let mailer = message => {
-    transporter.sendMail(message, (err, info) => {
-        if (err) return console.log(err.message);
-        // console.log('ok', info);
-    })
-}
+app.post("/nemomensshirt/sendEmail", async (req, res) => {
+  const checkBody = IsExist(req.body)
 
-app.post('/sendEmail', (req, res) => {
-    let {username, phone, message} = req.body
-    mailer({
-        from: 'mensshirtuz@gmail.com',
-        to: 'mensshirtuz@gmail.com',
-        subject: 'Mens Shirt',
-        text: `Ismi: ${username}\nTelefon raqami: ${phone}\nSms: ${message}\n`,
-    })
-    res.json({status: 200, message: 'OK'})
+  if (!checkBody) {
+    res.json({ status: 200, message: "OK" })
+    return
+  }
+
+  const { username, phone, message } = req.body
+
+  await nemomensshirtClient.send({
+    to: Deno.env.get("NEMOMENSSHIRT_USERNAME"),
+    from: Deno.env.get("NEMOMENSSHIRT_USERNAME"),
+    subject: "Nemomens Shirt",
+    content: `Ismi: ${username}\nTelefon raqami: ${phone}\nSms: ${message}\n`,
+  })
+
+  res.json({ status: 200, message: "OK" })
 })
 
-app.post('/sendPhone', (req, res) => {
-    let {username, phone} = req.body
-    mailer({
-        from: 'mensshirtuz@gmail.com',
-        to: 'mensshirtuz@gmail.com',
-        subject: 'Mens Shirt ',
-        text: `Ismi: ${username}\nTelefon raqami: ${phone}`,
-    })
-    res.json({status: 200, message: 'OK'})
+app.post("/mensshirt/sendPhone", async (req, res) => {
+  const checkBody = IsExist(req.body)
+
+  if (!checkBody) {
+    res.json({ status: 200, message: "OK" })
+    return
+  }
+
+  const { username, phone } = req.body
+
+  await mensshirtClient.send({
+    to: Deno.env.get("MENSSHIRT_USERNAME"),
+    from: Deno.env.get("MENSSHIRT_USERNAME"),
+    subject: "Mens Shirt",
+    content: `Ismi: ${username}\nTelefon raqami: ${phone}`,
+  })
+
+  res.json({ status: 200, message: "OK" })
 })
 
-app.post('/sendMessage', (req, res) => {
-    let {message, phone} = req.body
-    mailer({
-        from: 'mensshirtuzsss@gmail.com',
-        to: 'mensshirtuzsss@gmail.com',
-        subject: 'Mens Shirt ',
-        text: `Message: ${message}\nTelefon raqami: ${phone}`,
-    })
-    res.json({status: 200, message: 'OK'})
+app.post("/nemomensshirt/sendPhone", async (req, res) => {
+  const checkBody = IsExist(req.body)
+
+  if (!checkBody) {
+    res.json({ status: 200, message: "OK" })
+    return
+  }
+
+  const { username, phone } = req.body
+
+  await nemomensshirtClient.send({
+    to: Deno.env.get("NEMOMENSSHIRT_USERNAME"),
+    from: Deno.env.get("NEMOMENSSHIRT_USERNAME"),
+    subject: "Nemomens Shirt",
+    content: `Ismi: ${username}\nTelefon raqami: ${phone}`,
+  })
+
+  res.json({ status: 200, message: "OK" })
 })
 
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, '../', 'public', 'html', 'main.html')))
-app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, '../', 'public', 'html', 'contact.html')))
-app.get('/about', (req, res) => res.sendFile(path.join(__dirname, '../', 'public', 'html', 'about.html')))
+app.post("/mensshirt/sendMessage", async (req, res) => {
+  const checkBody = IsExist(req.body)
 
-app.listen(process.env.PORT, () => {
-    console.log('Server running on http://localhost:' + process.env.PORT);
+  if (!checkBody) {
+    res.json({ status: 200, message: "OK" })
+    return
+  }
+
+  const { message, phone } = req.body
+
+  await mensshirtClient.send({
+    to: Deno.env.get("MENSSHIRT_USERNAME"),
+    from: Deno.env.get("MENSSHIRT_USERNAME"),
+    subject: "Mens Shirt",
+    content: `Message: ${message}\nTelefon raqami: ${phone}`,
+  })
+
+  res.json({ status: 200, message: "OK" })
+})
+
+app.post("/nemomensshirt/sendMessage", async (req, res) => {
+  const checkBody = IsExist(req.body)
+
+  if (!checkBody) {
+    res.json({ status: 200, message: "OK" })
+    return
+  }
+
+  const { message, phone } = req.body
+
+  await nemomensshirtClient.send({
+    to: Deno.env.get("NEMOMENSSHIRT_USERNAME"),
+    from: Deno.env.get("NEMOMENSSHIRT_USERNAME"),
+    subject: "Nemomens Shirt",
+    content: `Message: ${message}\nTelefon raqami: ${phone}`,
+  })
+
+  res.json({ status: 200, message: "OK" })
+})
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`)
 })
