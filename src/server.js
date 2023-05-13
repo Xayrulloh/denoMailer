@@ -1,4 +1,4 @@
-import express from "npm:express"
+import express from "npm:express@4.18.2"
 import cors from "npm:cors"
 
 import { mensshirtClient, nemomensshirtClient } from "./config/config.js"
@@ -134,5 +134,5 @@ app.post("/nemomensshirt/sendMessage", async (req, res) => {
 })
 
 app.listen(PORT, () => {
-  console.log(`http://localhost:${PORT}`)
+  console.log(`Server running on http://localhost:${PORT}`)
 })
