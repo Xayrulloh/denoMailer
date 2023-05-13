@@ -12,7 +12,6 @@ app.use(express.static("public"))
 app.use(cors())
 
 const PORT = Deno.env.get("PORT") || 5000
-console.info(PORT);
 
 app.post("/mensshirt/sendEmail", async (req, res) => {
   const checkBody = IsExist(req.body)
@@ -134,4 +133,6 @@ app.post("/nemomensshirt/sendMessage", async (req, res) => {
   res.json({ status: 200, message: "OK" })
 })
 
-app.listen()
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`)
+})
