@@ -1,98 +1,60 @@
-import express from 'https://esm.sh/express@4.18.2'
-import cors from 'https://esm.sh/cors@2.8.5'
-import { requestBodyMiddleware } from './middleware/request-body.middleware.js'
 import { mensshirtClient, nemomensshirtClient } from './config/config.js'
 
-const app = express()
+Deno.serve(async (request) => {
+  if (request.method == 'POST') {
+    const url = request.url.split('/').slice(-2)
+    const body = await request.text()
+    const { phone, message, username } = JSON.parse(body)
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use(express.static('public'))
-app.use(requestBodyMiddleware)
-app.use(cors())
+    if (!phone) return new Response(JSON.stringify({ status: 200, message: 'OK' }))
 
-const PORT = Deno.env.get('PORT') || 5000
+    let content = ''
 
-// mensshirt
-app.post('/mensshirt/sendEmail', async (req, res) => {
-  const { username, phone, message } = req.body
+    switch (url[1]) {
+      case 'sendPhone':
+        content = `Ismi: ${username}\nTelefon raqami: ${phone}`
 
-  await mensshirtClient.send({
-    to: Deno.env.get('MENSSHIRT_USERNAME'),
-    from: Deno.env.get('MENSSHIRT_USERNAME'),
-    subject: 'Mens Shirt',
-    content: `Ismi: ${username}\nTelefon raqami: ${phone}\nSms: ${message}\n`,
-  })
+        break
 
-  res.json({ status: 200, message: 'Deeng' })
-})
+      case 'sendEmail':
+        content = `Ismi: ${username}\nTelefon raqami: ${phone}\nSms: ${message}\n`
 
-app.post('/mensshirt/sendMessage', async (req, res) => {
-  const { message, phone } = req.body
+        break
 
-  await mensshirtClient.send({
-    to: Deno.env.get('MENSSHIRT_USERNAME'),
-    from: Deno.env.get('MENSSHIRT_USERNAME'),
-    subject: 'Mens Shirt',
-    content: `Message: ${message}\nTelefon raqami: ${phone}`,
-  })
+      case 'sendMessage':
+        content = `Message: ${message}\nTelefon raqami: ${phone}`
 
-  res.json({ status: 200, message: 'OK' })
-})
+        break
 
-app.post('/mensshirt/sendPhone', async (req, res) => {
-  const { username, phone } = req.body
+      default:
+        break
+    }
 
-  await mensshirtClient.send({
-    to: Deno.env.get('MENSSHIRT_USERNAME'),
-    from: Deno.env.get('MENSSHIRT_USERNAME'),
-    subject: 'Mens Shirt',
-    content: `Ismi: ${username}\nTelefon raqami: ${phone}`,
-  })
+    switch (url[0]) {
+      case 'nemomensshirt':
+        await nemomensshirtClient.send({
+          to: Deno.env.get('NEMOMENSSHIRT_USERNAME'),
+          from: Deno.env.get('NEMOMENSSHIRT_USERNAME'),
+          subject: 'Nemomens Shirt',
+          content,
+        })
 
-  res.json({ status: 200, message: 'OK' })
-})
+        break
 
-// nemomensshirt
-app.post('/nemomensshirt/sendPhone', async (req, res) => {
-  const { username, phone } = req.body
+      case 'mensshirt':
+        await mensshirtClient.send({
+          to: Deno.env.get('MENSSHIRT_USERNAME'),
+          from: Deno.env.get('MENSSHIRT_USERNAME'),
+          subject: 'Mens Shirt',
+          content: `Ismi: ${username}\nTelefon raqami: ${phone}`,
+        })
 
-  await nemomensshirtClient.send({
-    to: Deno.env.get('NEMOMENSSHIRT_USERNAME'),
-    from: Deno.env.get('NEMOMENSSHIRT_USERNAME'),
-    subject: 'Nemomens Shirt',
-    content: `Ismi: ${username}\nTelefon raqami: ${phone}`,
-  })
+        break
 
-  res.json({ status: 200, message: 'OK' })
-})
+      default:
+        break
+    }
+  }
 
-app.post('/nemomensshirt/sendEmail', async (req, res) => {
-  const { username, phone, message } = req.body
-
-  await nemomensshirtClient.send({
-    to: Deno.env.get('NEMOMENSSHIRT_USERNAME'),
-    from: Deno.env.get('NEMOMENSSHIRT_USERNAME'),
-    subject: 'Nemomens Shirt',
-    content: `Ismi: ${username}\nTelefon raqami: ${phone}\nSms: ${message}\n`,
-  })
-
-  res.json({ status: 200, message: 'OK' })
-})
-
-app.post('/nemomensshirt/sendMessage', async (req, res) => {
-  const { message, phone } = req.body
-
-  await nemomensshirtClient.send({
-    to: Deno.env.get('NEMOMENSSHIRT_USERNAME'),
-    from: Deno.env.get('NEMOMENSSHIRT_USERNAME'),
-    subject: 'Nemomens Shirt',
-    content: `Message: ${message}\nTelefon raqami: ${phone}`,
-  })
-
-  res.json({ status: 200, message: 'OK' })
-})
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`)
+  return new Response(JSON.stringify({ status: 200, message: 'OK' }))
 })
